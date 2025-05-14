@@ -1,0 +1,68 @@
+Day 3 - Date-07-05-2025
+
+Topics- GitHub and Node.js
+
+-------------------------------------------
+
+* json file - language independent data format, data interchange, k:v pair, supports multiple ds like array, number, string,json itself.
+
+* yaml - yet another markup language, superset of json, json are valid in yaml, primary use is config file, name-value pair, it do not contains the braces.
+
+* benefits - yml offers more functionality then json, prevents duplicate key values, simplt to read and understand, supports comments, preferred in config files, @json is having a simpler data types and structures, faster parsing and generating.
+
+-------------------------------------------
+
+# Node.js - runtime environment for JS in server side, javascript is client side.
+-We cannot put JS directly at client side, it will be loaded in the browser first.
+-It is open source, crossplatform JS runtime env, that lets devlopers create servers, web apps, command line tools and scripts.
+-window (DOM object) (browser side server for JS)
+
+* REPL (Read-Eval-Print-Loop) is an interactive shell that processes the Node.js env.
+- global.console.log("asdf") -> asdf as output (read about global)
+- Synchronous and Asynchronous 
+- NPM packages are predefined packages for writing server side code.
+- Node.js uses a non-blocking I/O asynchrous fxns calls perform operations - like the sys or fetching data from databas, same as browser.
+-npm is open source market for others to use the libraries and packages.
+
+-Global objects - dont require the import or explicit declaration, variables/functions, they provide the access to built-in functionalities.
+- Standard Modules - these are bundled with Node.js and can be imported directly using require()
+- Custom Modules
+
+* e.g.- "const fs = require('node.fs');
+fs.writeFileSync('hello.txt,'Hello World!');"
+
+* npm init - initialize the node project.
+* npm install - install the basic dependencies.
+* npm install <package-name>
+* npm update -  update al the dependencies
+* npm uninstall <package-name> - uninstall specific package
+* npm install <package-name> --save-dev - saves for the dev env only.
+
+-------------------------------------------
+
+# Git - is the most common version control system to help developers to worlk collaboratively.
+- you can store your code in got repo and track all the changes done on the code.
+- it allows to revert the older version seamlessly in case of any issues with the newer updates.
+
+- Workspace->Stage->Local Repo->Remote Repo.
+- git fetch - to local repo from remote repo.
+- git pull - to workspace from remote repo.
+
+- git init
+- git add .
+- git commit -m "msg"
+- git Branch -M main - rename the current branch
+- git remote add origin "url" - origin is the name of the remote, wecan change that.
+- git push -u origin main - upstream push to the remote repo (git branch --set-upstream)
+- git pull - to pull the changes from remote to local repo
+- git branch <branch-name> - to create a new branch
+- git checkout <branch-name> - to goto new/old branch
+- git log - logs of commit
+- git status - tracks the changes
+- git fetch 
+- git merge
+* git pull request - merging the two branches or one with another. In actual scenario there will be reviewers to review the merging.
+- git stash - saves the changes to the local storage somewhere and then we can do other stuff.
+- git stash pop - to get those saved changes.
+
+-------------------------------------------

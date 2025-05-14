@@ -1,0 +1,14 @@
+{
+  "name": "sample-project-starting",
+  "version": "1.0.0",
+  "description": "sample project starting with npm init",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kanwal",
+  "license": "ISC",
+  "dependencies": {
+    "validatore": "^1.0.1"
+  }
+}
