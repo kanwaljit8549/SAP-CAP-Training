@@ -1,5 +1,4 @@
 namespace com.sap.BookStore;
-
 using {managed, cuid, Currency} from '@sap/cds/common';      // adding standard 
 
 type Isbn : String(13);      // Type
@@ -14,9 +13,10 @@ entity Books : cuid, managed{                   // (2)
     title :String;
     isbn : Isbn;
     amount : Currency;
+    reviews : Composition of many Reviews on reviews.book = $self;
 }
 
-entity Authors :cuid  {
+entity Authors :cuid {
     authorName : String;
     isbn : Isbn;
     address : Address;
@@ -27,5 +27,11 @@ entity Authors :cuid  {
     // books : Association to Books ;            // This will also work - association (Managed)
     // books_c : Composition of one Books ;     // i guess it will work but in order to have our view BookTitle work we need to remove these associations and compositions
 
+
+}
+
+entity Reviews : cuid {
+    comment: String;
+    book : Composition of Books;
 
 }

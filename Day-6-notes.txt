@@ -1,0 +1,80 @@
+Day 6 - Date-10-05-2025
+Topics - Using the impl annotation
+- Debug the CAP App
+- Binding HDB instance to app
+- Using the Hybrid profile to run an Application with the DB
+- Authorization and Authentication
+
+* Using the "impl" annotation
+//Example
+- service BookStoreService @(impl : './bookStoreService.js') { Service_Def }
+- only if the service implementation .js file is not with the same name.
+
+* Debug the CAP App
+- 2 ways
+- 1 - cds watch - need to configure that what command will trigger it.
+- 2 - javascript debug terminal from terminal, cds watch and place the debugger point in the required line.
+
+Note - Action - we need to pass some data, in order to get in executed from http req POST, 
+POST https://..................../book-store/ratebook
+Content-Type : application/json
+{
+    "bookID":10,
+    "rating":10
+}
+- while debugging we can check the values in the console by writing the "req" and "req.data".
+
+* Handling the errors - try catch blocks with req.error() and req.reject().
+
+* Binding HDB instance to app
+// not complete yet
+
+* Authentication & Authorization
+- Authentication - validating the user for the system.
+- Authorization - works as authenticator to check what we are allowed to do in the system.
+
+// Basic Annotations
+- @readonly
+- @insertonly
+
+// Example 
+service BookStoreService @(impl : './bookStoreService.js') @(requires: ['Admin','Customer']) {
+    @readonly
+    entity Books as projection on db.Books ; 
+    @readonly
+    entity Authors as projection on db.Authors ; 
+}
+
+- when we will try to run the app and access the data we will not be having the access bcz we added the authorization into our services published.
+- we can check the login required by going into the Private window in browser or remove the cache.
+
+Note -  // sample code for persistence 
+- in package.json - in cds-requires-development-auth-kind:"mocked","users":{"abc@gmail.com:{"password":"initial@123","roles":"["admin"]}}
+
+"cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        }
+      }
+    },
+    "sql": {
+      "native_hana_associations": false
+    }
+}
+
+* Using the Hybrid profile to run an Application with the DB
+- after deploying the artifacts to native_hana_associations, HDI container will automatically be deployed along with the service key.
+- But it will be binded because there is no binding avaialble. So, there will be no .cdsrc-private.json file because it hold the binding info and labelled as hybrid profile.
+- So, when we bind it with hdi container, this file will be created and holds the info of hybrid profile 
+- with hybrid profile we will be making sure that we want to use the hana-cloud db for us in the particular running session.
+- otherwise, it will be in-memory (if nothing is specified) or sqlite (if specified in package.json (also, if the data persists or not, that depends on the credentials are provided along with it))
+- cds watch --profile hybrid
+
+Note - doubt - What if we wanted to bind another HDI container with our app
+- I tried to bind it with "cds bind --to new-hdicontainer:sk". 
+- the .cdsrc-private.json gets updated with the command.
+- but when we try to deploy again into this new container, it updates the .cdsrc-private.json file back to the old hdi container.
+- So, not sure, where exactly it should be updated in order to bind a new container.

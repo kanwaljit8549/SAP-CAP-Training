@@ -1,0 +1,11 @@
+
+
+
+GET http://localhost:4004/odata/v4/BookStoreService/Books
+
+POST http://localhost:4004/odata/v4/BookStoreService/Books
+Content-Type: application/json
+
+{
+    
+}

@@ -1,7 +1,10 @@
 using {com.sap.BookStore as db} from '../db/schema';
 
-service BookStoreService {
+service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService') @(requires: ['Admin','Customer']) {
+    @cds.redirection.target
+    @readonly
     entity Books as projection on db.Books ; 
+    @readonly
     entity Authors as projection on db.Authors ; 
 
     // entity BookTitles as select from db.Authors ;              // not working (but were trying for creating a view with particular fields)
@@ -13,13 +16,7 @@ service BookStoreService {
     // function getBooksFunction ;
     // action getBooksAction ; 
 
-
-
-
-
-
     //Day-5 
-
     // entity BookReview 
     // as select from Books as b 
     // join db.Reviews as r 
@@ -31,7 +28,19 @@ service BookStoreService {
     //     r.comment
     // }
 
-    // action rateBook() ;
-    // function getPopularBook() returns rateBook() ;
+    // Day-6
+    // action rateBook(bookID:Integer,rating:Integer) returns Books;
+    // function getPopularBook() returns Books ;
 
+}
+
+service CustomerService @(path : 'CustomerService') @(requires : ['Admin','Customer']) {
+    @readonly
+    entity Books as projection on db.Books;
+    @readonly
+    entity Author as projection on db.Authors;
+    @readonly
+    entity Reviews as projection on db.Reviews;
+    // @readonly
+    // entity Publishers as projection on db.Publishers;
 }
