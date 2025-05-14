@@ -13,4 +13,25 @@ service BookStoreService {
     // function getBooksFunction ;
     // action getBooksAction ; 
 
+
+
+
+
+
+    //Day-5 
+
+    // entity BookReview 
+    // as select from Books as b 
+    // join db.Reviews as r 
+    // on b.ID = r.book.ID 
+    // {
+    //     b.ID ,
+    //     b.title 
+    //     r.rating,
+    //     r.comment
+    // }
+
+    // action rateBook() ;
+    // function getPopularBook() returns rateBook() ;
+
 }

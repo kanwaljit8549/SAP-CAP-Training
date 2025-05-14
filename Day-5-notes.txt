@@ -1,0 +1,126 @@
+Day 5 - Date-09-05-2025
+Topics - @path Keyword
+- Testing Service Locally
+- Persisting data with sqlite
+- Custom Handlers/Event phases 
+- Implementing Actions and Functions
+- Creating the HANA Cloud Instance 
+
+Note - "@cds.redirection.target" - used in our project so that if Authors have been declared for the Composition, it can not be able to map it to the Books, something like that here. So, we have to add the Key ID or cuid in every Entity 
+- cds deploy -  initialize the data.
+- cds build - to build the libraries.
+
+* @(path: "ServiceName")
+- By default, the endpoint (url name) of an exposed service is constructed based on its name, following some conventions (the string 'Service' is omitted and kebab-case is enforced). If you want to override the default path or make it explicit, you can add the @path annotation as in the example. There, the @path annotation specifies the URL path under which this service will be accessible, namely /admin.
+- In srv/service.cds :- 
+    service BookStore @(path: "ServiceName") { 
+        Service_Def 
+    }
+- for reference - https://learning.sap.com/learning-journeys/getting-started-with-sap-cloud-application-programming-model/providing-services_ee508784-dd92-4df0-869c-ab9155e1b9aa
+
+* Testing Service Locally
+- Create .http file in project root folder.
+- Write call to Service for GET as following -
+GET http://localhost:4004/odata/v4/book-store/Authors
+- POST call -
+POST http://localhost:4004/odata/v4/book-store/Authors
+Content-Type: application/json
+{ data_here }
+- similar for other options
+- once we write these we will be having the send request option on top it.
+
+* Persisting data with sqlite
+data added in the previous call we stopped the server and again started, now we dont have the data save or persistent.
+- it was in inmemory but not saved.
+- enable that by providing the statement in package.json.
+- { "cds": { "requires" : {"db":"sqlite"}
+- { "cds": { "requires" : {"db":{"kind":"sqlite","credentials":{"url":"db.sqlite"}}
+requires node library called : @cap-js/sqlite
+
+
+* Custom Handlers/Event phases 
+- by default the sap cap provide all the functionality for CRUD and much more,
+if we want to add some custom functionality, we can add it 
+
+
+- on
+- useful for overriding the functionality provided by the sap cap's generic service provider
+- in case you want to go to the generic behavior in some cases, you can call the statement "await next();"
+- you can have multiple handlers for on phase, but if one of the on Handlers successfully executes and sets a return value, then remaining are skipped
+
+- before
+- useful for validations and other preprocessing requirements.
+- this run before the on handlers
+ - if validations fails, you can call req.reject() and the error message along with the status code
+- all the handlers for the event will get executed in the parallel, order of the execution would not be in sequence 
+
+- before is used for the validations and it will be done something like this like i have to add something in to the db.
+
+
+- after
+- useful for postprocessing tasks such as triggering other actions or augmenting the output for generic handlers.
+- all the handlers for the event wwill get executed in the parallel,order of executionwould not be in queue
+
+- db updated and we wanted to make some data output and make changes after db updated.
+
+format - 
+this.<eventPhase>("<>", <entitySet> ,<function> => {} )
+
+
+* Implementing Actions and Functions
+- Action - do not return anything (in service.cds file)
+- Functions - always has to return something (in service.cds file)
+
+Note - later on we will be giving the implementation of these Actions and Functions in Implementation.js file. (like this.on("actionName/FunctionName"),EntitySet,funcName()=>{})")
+
+
+* HANA Cloud  
+Note - [hdi - hana deployment Infrastructure] 
+- [creating a schema before creating the database]
+- [kind of instance to my db]
+- [sometime we get error while opening them in HDB Explorer, it is creating the key in the backend so that we can access it and we dont have to entry the key everytime] 
+- Best Practise - it is not advised to use the HDB Explorer but we can do the stuff here as well.
+
+
+- HANA Cloud Instance Creation - Subscribe to the HANA Cloud 
+
+- "cds add hana" - for adding the hana dependency in package.json.
+- "npm i"
+- change the package.json - "db":"sqlite" to "db":"hana"
+
+- Deploy the sqlite - "cds deploy --to-hana"
+
+Note -  at this moment we may have to login into CF.
+- No service plans found for hdi-shared will be found in the first place [Error]
+
+- goto Entitlements and add the hdi-shared plan of HANA Cloud.
+- create a instance and then bind it to the App. (when we deploy the "cds deploy --to-hana" the hdi container will be created automatically)
+
+Note - Earlier the mapping concept was not there now it is, so we have to map the CF into the HANA Cloud.
+
+
+
+
+Note -  we can normally deploy the schema and data to 
+
+
+
+
+- cds bind --to BookStore-db-hdi-container - binds the db-hdi to the app so that we dont have to enter the pass into the 
+
+- "cdsrc,private.json" - we can see the changes in the file, created a profile - "hybrid" - if wanted to the local, development, production or db environment.
+- config to 
+
+
+// Important
+- cds watch - will use the sqlite 
+- "cds watch --profile hybrid" - if we want to use the hana directly while running the application.
+- if we POST some data into the table while using the hybrid profile
+
+
+
+- note - if the hana db artifacts are not deploying 
+- mapping the cf to db
+- wrong data in the tables
+- wrong associations or wrong configuration in code.
+- cf login (always req) before - cds deploy --to hana

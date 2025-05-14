@@ -5,7 +5,7 @@ using {managed, cuid, Currency} from '@sap/cds/common';      // adding standard
 type Isbn : String(13);      // Type
 type Address : {
     address : String;
-    pincode : Integer; 
+    pincode : Integer;
 }
 
 // entity Books extend with managed{       // both ways work (1)
@@ -16,11 +16,11 @@ entity Books : cuid, managed{                   // (2)
     amount : Currency;
 }
 
-entity Authors : cuid {
+entity Authors :cuid  {
     authorName : String;
     isbn : Isbn;
     address : Address;
-    // books : Association to Books on books.ID =  books_ID ;            // association   (UnManaged)
+ //books : Association to Books on books.ID =  books_ID ;            // association   (UnManaged)
     // books_ID : UUID;             // if I delete this it will be taken care by SAP CAP itself
 
     // books : Association to many Books ;            // association (Managed)
