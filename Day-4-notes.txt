@@ -1,0 +1,122 @@
+Day 4 - Date-08-05-2025
+Topics- Need for side-by-side extensibility
+- What is a CAP Model?
+- What is Capire
+- Initializing CAP Project
+
+* Side-by-Side Extensibility - 
+- In ABAP, extensibility can be done by BAPI, BADI, and programs to extend standard functionality.
+- SAP BTP - ABAP Env, CF Runtime, Kyma Env, SAP Build. (comes under SAP BTP s-b-s Ext.)
+
+* CAP Model - framework provided by SAP to help developers build enterprise-grade services and applications efficiently and consistently.
+-framework of lang,lib, tools, fir enterprise-grade cloud applications.
+-can have any frontend, using open source language. running on top of the servers.
+- any databases, oracledb, postgresql,sqlite and much more.
+- any lang for development.
+
+* Capire - Official Documentation
+
+* Initializing CAP Project - 
+- With CLI - cds init.
+- With Template Wizard - basic structure of the project is being created like .vscode, app/, db/, srv/, .gitignore, eslint.config.mjs, package.json, README.md (info about project).
+
+- Domain Modeling->Build Process->(ODATA Model and Persistence Model)   //(Diagram)
+- Built-in DataTypes (check Capire for documentation)
+- e.g. - Boolean, Integer, Int16, Int32, UInt8, UUID, etc.
+
+* Entities - structured DataTypes, which cotains multiple typed elements within them.
+- Provide Name in Plural, Start the name with Capital Letter, Set element name in lower case.
+- Types - are common reuse artifacts that let you create new custom types that can be used within your entity, type, or view definitions. They let you keep your entity def succinct and ........
+
+* Aspects - lets you extend def (type, entity, view), by adding new elements or overwriting existing elements. 
+- you can extend the predefined ........
+- In @sap/cds/common standard package - cuid, managed, Temporal. 
+
+* CodeList -  Code List refers to a set of valid values for an element.
+- SAP providers code list for countries, currencies, languages, in package @sap/cds/common.
+
+* Association - capture relationships b/w entities, there associations are interpreted as foreign keys in the db.
+
+* Composition - is a special type of association where the associated entity (child entity) can't exist without the parent entity.
+
+* CDS language to Core Schema Notation - what ever we write in schema.cds it will be compiled and build, later on we can use it for ODATA.
+
+//Example
+- cds compile ./db/schema.cds -2 json    //its going to compile schema.cds into a json format which will contain the artifacts of the entities.
+- cds compile ./db/schema.cds -2 sql
+- Note - we can create this for any DB.
+
+* Creating Services - lets you expose the functionality you build to external consumers.
+- service can be defined using the service keyword.
+- by convention, you create service definition in srv folder.
+- during service definition, first you need to import the entities you defined in the domain model.
+- extension - ".cds".
+//Example 
+service demoService {
+ // Entity Definitions
+}
+
+-We can use 2 types of services 
+* Projection (as it is, only for one entity) and 
+* View (we can have more then one entity, and use multiple queries on top of that).
+
+//Example (compile .srv file)
+- cds compile ./srv/cat-service.cds -2 sql
+
+//Example (run the project)
+cds watch - default used for running the project.
+cds watch --profile hyrbid - default used for running the project with HANA DB (if we are using it).
+cds run - will not track the changes
+- Note - cds serve is the main command but on top of that we use cds watch (additionally tracks changes) and cds run (does not track changes). Only convenient ways to use cds serve.
+
+- Out of the box functionalities provided by SAP CAP Model.
+Query Options
+Deep Read
+Deep Insert
+Deep Update
+Deep Delete
+UUID Keys
+Search Functionality
+Input Validations
+Automatic Field Updates
+ETag Support
+
+- Consumers-(interact)>ODATA Service-(defines)>Service Model-(consumes)>Domain Model-(defines)>Database    //(Workflow Diagram)
+
+-Note - CAP provides automatically the CRUD into the DB, handles them, otherwise we have to create the methods for that in ODATA.
+
+* Actions and Functions - these are operations that aren't any of the CRUD operations.
+
+* Action - is an operation that will have a side effect, means its going to update an entity or an object in the database.
+- action is invoked by an HTTP POST method.
+
+* Function - defined for all operations that dont make any updates (no side effects on the DB).
+- uses the HTTP GET method.
+
+* cds add data - command which generates the data folder in db, ./db/Data/
+- to add the data in the db for temporary purposes (Development).
+
+Note - 
+// we are using the ID by ourself here, so we have to take care of it.
+entity Books {                   
+     key ID : Integer;          
+    title :String;
+}
+
+// we are using CUID here, it is extending the functionality from @sap/cds/common, where it is already providing the structure (shown below), we need not to take care of it.
+entity Books : cuid {                             
+    title :String;
+}
+
+// Inside @sap/cds/common this is the decalaration of the aspect.
+aspect cuid {
+  key ID : UUID; //> automatically filled in
+}
+
+
+Note - if we are using the Currency Aspect from @sap/cds/common, it will only provide us the Structure and when we will generate the artifacts of it, it will generate a Table by default for us to manage the vakues of the currencies. So, it is going to be published as a Service by default even if we didn't created one. (Keep in mind)
+
+Best Practises - Make sure to have one key attribute in the Entity, otherwise you may face an error to declare one primary key attribute in the Entity. (Also, without it I guess we will not be able to have a Fiori Preview available (means it will not work))
+- Keep Entity Name starting with Capital Letters.
+- Keep Type Name starting with Capital Letters.
+- Keep attribute name starting with lower letters.
