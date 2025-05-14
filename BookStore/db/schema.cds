@@ -5,7 +5,7 @@ using {managed, cuid, Currency} from '@sap/cds/common';      // adding standard
 type Isbn : String(13);      // Type
 type Address : {
     address : String;
-    pincode : Integer;
+    pincode : Integer; 
 }
 
 // entity Books extend with managed{       // both ways work (1)
