@@ -14,12 +14,14 @@ entity Books : cuid, managed{                   // (2)
     isbn : Isbn;
     amount : Currency;
     reviews : Composition of many Reviews on reviews.book = $self;
+    author : Association to Authors;
 }
 
 entity Authors :cuid {
     authorName : String;
     isbn : Isbn;
     address : Address;
+    book : Association to many Books on book.isbn = isbn;
  //books : Association to Books on books.ID =  books_ID ;            // association   (UnManaged)
     // books_ID : UUID;             // if I delete this it will be taken care by SAP CAP itself
 
@@ -31,7 +33,8 @@ entity Authors :cuid {
 }
 
 entity Reviews : cuid {
+    rating : Integer;
     comment: String;
-    book : Composition of Books;
+    book : Association to Books;
 
 }

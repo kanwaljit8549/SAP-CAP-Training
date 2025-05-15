@@ -1,10 +1,11 @@
 using {com.sap.BookStore as db} from '../db/schema';
 
-service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService') @(requires: ['Admin','Customer']) {
+// @(requires: ['Admin','Customer']) // in next line
+service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService')  {
     @cds.redirection.target
-    @readonly
+    // @readonly
     entity Books as projection on db.Books ; 
-    @readonly
+    // @readonly
     entity Authors as projection on db.Authors ; 
 
     // entity BookTitles as select from db.Authors ;              // not working (but were trying for creating a view with particular fields)
@@ -33,13 +34,13 @@ service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService'
     // function getPopularBook() returns Books ;
 
 }
-
-service CustomerService @(path : 'CustomerService') @(requires : ['Admin','Customer']) {
+// @(requires : ['Admin','Customer']) // in next line
+service CustomerService @(path : 'CustomerService')  {
     @readonly
     entity Books as projection on db.Books;
     @readonly
     entity Author as projection on db.Authors;
-    @readonly
+    // @readonly
     entity Reviews as projection on db.Reviews;
     // @readonly
     // entity Publishers as projection on db.Publishers;

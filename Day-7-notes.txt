@@ -1,0 +1,140 @@
+Day 7 - Date-12-05-2025
+Topics -  SAP UI5
+- SAP Fiori
+- SAP Design Principles
+- SAP Floorplans
+- SAP Fiori Elements
+
+* SAP UI5
+- is a HTML5 Framework for creating enterprise-grade responsive web apps. It comes with the ready to use controls that can be used to develop web app rapidly.
+
+* SAP Fiori 
+- SAP Fiori is the design language that helps enterprises create app with consistent UX.
+- Companies can use Fiori guidelines and tools to simplify the application development across various SAP Solution such as SAP S/4 HANA, SAP SuccessFactors and other.
+
+* 5 Design Principles
+- Role-based - means that it is designed for you, your needs, and how you work.
+- Adaptive - means that it adapts to multiple use cases and devices. (it should run similar in any device - mobile, tablet, desktop)
+- Coherent - means that it provides one fluid, intuitive experience. (consistent visual design patterns)(placement of columns, Button, Table)
+- Simple - means that it includes only what is necessary.()
+- Delightful - means that it makes an emotional connection. (user can build a connection with app like we build with any social media apps)
+
+* SAP Floorplans - you should be having the app of particular type, for each they defined the set of guidelines, where the control will be placed, the look and feel floorplans.
+- Overview Page
+- List Floorplans - List Report, Analytical List Page, Worklist
+- Object Floorplans - Object Page, Wizard, Initial Page.
+
+* Overview Page - get an overview of the key taks and information needed for a specific user role. react to info (can be usefule to expose the data what info required like chart or info of the particulat quater)
+
+* List Floorplans
+- List Report - ant kind of large dataset, act on relevant objects (we can act on it as well, like CRUD)
+- Analytical - Extract the knowledge of the data from objects by using business intelligence features.
+- worklist -  predefine set of objects, (operations you need to do, focusing on particular tabs (tabs will be there for different works), like approval required from you end)
+
+* Object Floorplans
+- Object Page - Display, create or edit an object, get an overview.
+- Wizard - create or edit the object, guide the user through a series of steps task is rather or unfamiliar. (steps created and in sequence)
+- Initial Page - navigate to one object and work on this object. (order something from Ecom  and where is it, via adding the tracking number) 
+
+* SAP Fiori
+- we will be using the template by default without writing most of the code.
+
+- SAP Fiori Elements
+- is a framework provided by sap to accelerate the devlopment of consistent, userfriendly, and enterprise-grade web app. ITs part of the broader sap fiori design system and is built on top of sapui5.
+- sap fiori elements provide predefined templates for common application patterns. These templates help developers create UI quickly without writing extensive front-end code, while still adhering to the sap fiori design principles.
+- updates the templates auto according to the latest fiori version, so all the application will follow newest fiori guidelines.
+
+- Triangle diagram - SAP Fiori Elements AppUI, Annotations and metadata, SAP Fiori Elements templates and annotations processor.
+
+- Note - Fiori app from 3rd party. standard app - add custom columns and all view modification and extension project.
+
+* Implementation - Generate a Fiori App using the SAP Fiori Generator, from a CAP Project (add service)
+- in annotations.cds - add the code for annotations
+// Example
+annotate service.Books with @(
+	UI.LineItem : [{
+		$Type:'UI.DataField',
+		Label: 'title',   // make sure that the name matches in the schema.cds
+		Value : 'title'
+  }]
+)
+
+- Fiori Elements App - based on the metadata and annotations, created at the runtime.
+
+There are 2 ways annotations and GUI based app development
+- open Guided Development - to create a Fiori Elements App in GUI based.
+// Example
+- UI.FieldGroup > click on start guide > select the CDS file > select the SRV > select the ENTITY > enter the newly created the Qualifier (GenInfo) > LABEL (BookStore) > add FIELD > insert snippets. (will generate the code  snippet into the file), 
+Now the details will not be there, because we have to create a Facet to show it on object page.
+
+start guide UI.Facet > everything same .........
+
+will be inserted in service.cds placed in app/
+
+- Error 
+- cuid is alphanumeric but the Fiori elements are getting it as numeric.
+- solution  - try to take the ID Field as well in the annotations.cds (is not working)
+- Possible Issue - giving the issue with the odata srv not the Fiori elements
+- solution - 
+
+* Draft functionality 
+- draft is an interim version of your data that isn't yet saved as an active.
+- this version still exist in the database, but as temporary data in draft tables.
+- if we make any chances to data, then a draft will be saved auto to the draft db tables, which will continuously be updated with our latest changes in the backgoround.
+- once we explicity save it by clicking the save button, it will get saved as an active version and it will be deleted from the draft tables and saved into actual db tables where ever they are intended to be saved.
+
+@odata.draft.enabled
+- add it in the cat-services.cds in srv/
+- Note - not sure if the SQLite supports it or not.         // need to check
+- we can check that the same info in metadata somewhere > cds build > cds watch> check the metadata > search active "isActiveEntity" > cds deploy --to-hana > open explorer > check the table >  (was not able to check it in hana for not, but not in the SQLite, we was able to workit with it)
+- working on Fiori app- something imp i am working on in mobile , having the issue with the network, it will be saved in draft table.
+- stored in temp table, once make it active it will delete it from the temp table. 
+- booking a ticket is an example
+- it helps to continue later.
+
+- create Fiori app and Fiori elements.
+
+Doubt
+- annotations Precedence if we are adding the fiori elements UI into the CAP, which one would be considered if we wanted to do the 
+- lowest "srv/annotaions.cds" service level < then "app/services.cds" level < then "annotations.cds" inside app level < then highest "app/ext/" if any custom code is added.
+
+
+
+
+
+
+
+
+// Old Code just for ref
+
+"cds": {
+    "requires": {
+      "db": "sqlite",
+      "[Production]": {
+        "db": "hana"
+      },
+      "[Development]": {
+        "auth": {
+          "kind": "mocked"
+        },
+        "users": {
+          "admin@gmail.com": {
+            "password": "password@123",
+            "roles": [
+              "Admin"
+            ]
+          },
+          "customer@gmail.com": {
+            "password": "password@123",
+            "roles": [
+              "Customer"
+            ]
+          }
+        }
+      }
+    },
+	"sql": {
+      "native_hana_associations": false
+    }
+}
+	

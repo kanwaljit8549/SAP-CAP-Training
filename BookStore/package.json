@@ -15,36 +15,23 @@
     "@cap-js/cds-types": "^0.10.0"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds-serve",
+    "watch-bookstore": "cds watch --open bookstore/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
-      "db": "sqlite",
-      "[Production]": {
-        "db": "hana"
-      },
-      "[development]": {
-        "auth": {
-          "kind": "mocked"
-        },
-        "users": {
-          "admin@gmail.com": {
-            "password": "password@123",
-            "roles": [
-              "Admin"
-            ]
-          },
-          "customer@gmail.com": {
-            "password": "password@123",
-            "roles": [
-              "Customer"
-            ]
-          }
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
         }
       }
     },
     "sql": {
       "native_hana_associations": false
     }
-  }
+  },
+  "sapux": [
+    "app/bookstore"
+  ]
 }

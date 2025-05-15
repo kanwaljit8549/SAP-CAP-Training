@@ -1,1 +1,3 @@
-ID,title,isbn,amount_code,createdAt,createdBy,modifiedAt,modifiedBy
+ID,title,isbn,amount_code,author_ID,createdAt,createdBy,modifiedAt,modifiedBy
+1,The Great Gatsby,9780141182636,USD,User1,2025-05-09T11:45:23Z,User1,2025-05-09T11:45:23Z,User1
+2,To Kill a Mockingbird,9780060935467,USD,User2,2025-05-09T11:45:23Z,User2,2025-05-09T11:45:23Z,User2
