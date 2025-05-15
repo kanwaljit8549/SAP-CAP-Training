@@ -1,0 +1,13 @@
+Day 8 - 13-05-2024
+
+Revise the concepts and make your app up and running with HANA and FIORI Elements.
+
+// trainer's project up until now
+Git link - https://github.com/gb-githb/bookstore
+
+Git link (Forked to my own Github) - https://github.com/kanwaljit8549/bookstore-fork
+
+* patch - in case the data is not available it will create data.
+* put - data available update it what ever is provided.
+
+- doubt - put creating the data as well.
