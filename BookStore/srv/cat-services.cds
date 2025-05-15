@@ -1,7 +1,7 @@
 using {com.sap.BookStore as db} from '../db/schema';
 
 // @(requires: ['Admin','Customer']) // in next line
-service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService')  {
+service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService') @(requires: ['Admin','Customer','system-user'])  {
     @cds.redirection.target
     // @readonly
     entity Books as projection on db.Books ; 
@@ -35,7 +35,7 @@ service BookStoreService @(impl : './cat-service.js') @(path: 'BookStoreService'
 
 }
 // @(requires : ['Admin','Customer']) // in next line
-service CustomerService @(path : 'CustomerService')  {
+service CustomerService @(path : 'CustomerService') @(requires : ['Admin','Customer','system-user']) {
     @readonly
     entity Books as projection on db.Books;
     @readonly

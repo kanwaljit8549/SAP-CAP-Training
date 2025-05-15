@@ -1,0 +1,89 @@
+Day 9 - 14-05-2025
+Topics - 
+
+
+* MTA Application - (Mutli Target App)
+- MTA is logically a single app comprised of multiple parts created with different tech, which share the same lifecycle.
+ 
+* Defined (How)
+* 3 Main configurations
+- 1 - Global Element - define overall properties of the multi target app, eg - ID, version, _schema-version, description.
+- 2 - Modules - define the app modules to built, their type, the path to their specific development, eg - modules such as app1, app2.
+- 3 - Resources - defined the cf srv will be used for the app, eg - resources such as 
+
+- module - module element declares the source module of the mta project, it declares the deployable modules
+- resources - a resource is a something which is required by a module of the mta at runtime or deployment time, but not provided inside the MTA.
+
+* how we will define the mta module :-
+- will have a .yaml file
+* 3 main parameters of the module
+name: a         // name when deployes to cf
+type: nodejs
+path: gen/app1       // relative path to app
+
+* resources
+name : my-mta-db
+type : com.sap.xs.hdi-container
+parameters:
+	service: hanatrial
+	service-plan: hdi-shared
+
+* Global
+
+
+
+* App Router
+- Standalone - will be taken care by developer.
+- Managed - taken care by sap.
+
+- App Router - single entry point for a app running in the sap btp.
+- What it does? -  used to serve static content, authenticateusers, rewrite url's and forward or proxy requests to other micro services while propagating user info.
+
+* Difference b/w Standalone and Managed App Router
+- Standalone - we will develop, supports multi tenancy requirements, need to first expose the app as a content provider using saas registry srv, need to firdst expose the app as a content provider suing the saas reg srv, app is createdby adding the url of the standalone app in launchopad.
+- Managed - managed by sap, doesn't support multitenancy, built in integration with launchpad service and all the sap services, can efficiently work on custom domain, app is created in Launchpad when we refeesh and select the app from html5 repo in the content provider of the launchpad srv
+
+* XSXUA [Extended Services User Account and Authentication]
+- Authentication and Authorization
+- is sap is a srv used for auth and auth in cloud based app on the btp.
+- it provides user management, role assignement, and OAuth 2.0 based authentication, allowing applications to securily manage user access.
+
+* JWT token
+- when we want to authentication it will give us a JWT token (json web token).
+- it represents user info and authorization details , allowing apps to validate these tokens and determine access privileges.
+- used particularly within the XSUAA service.
+
+* Scope, Role Template, Role, Role Collection
+
+- dev > xs-security.json (role template>scope)> CF-xsuaa (Role, Role Collection, XSUAA Instance (App1, App2, App3))> Admin       // diagram
+
+- rolecollection>role>scope   // hierarchy
+
+* app deployment ------- // [commands]
+- cds add hana --for production   // create dependency of cds hana and add the production profile : db:hana in package.json
+- cds add xsuaa --for production  // create dependency of cds xsec and add the production profile : auth:xsuaa in package.json,adds the role templates in xs-security.json and will generate it
+-cds add html5-repo           // will add html5-runtime added into package.json, scripts, ui5-task-zipper dependency, ui5-deploy.yaml created, xs-app.json (define the routes, )
+- run command from the app/ folder : npm i     // adds noe_modules, [deleted dist/i18n]
+- run the command from - cds build --production        // generates the artifacts for production env
+- cds add mta         // generates mta.yaml
+- cds add workzone-standard      // create a dest in mta.yaml for our ui5
+- npm install
+- mbt build        // mta  tool, it is going to make a mta_archieves folder, which we can deplpoy later.
+- cf deploy ____path of mtar file or write click on the mtar file and deploy.
+
+- every service which is required will be created while we deploy the app, so, it will process the new changes deploy that to db as well. (can also redeploy the changes the next time)
+
+- note - delete the data from the csv and hana build that it can generate a valid cuid not 1, 2, 3,etc. so it will generate the cuid automatically
+
+- once deployed we will not be able to access the app right away, here the managed app router is not created so sap will not be able to provide the JWT and pass the url to the app.
+
+- open the postman
+- give the srv url 
+- provide the authorization - OAuth 2.0 (select), provide client ID and client secret and url (3 things, copy and paste), in last we have to write in the last - url/oauth/token. it is not my user it is for system user.
+- click get new access token > it will generate the JWT (divided into 3 parts) > use token > into authorization > GET req > 403.  // need to do confirm
+- didn't allowed my system-user to access the app, change the cat-services.cds 'system-user' into the @requires, cds build --production, mbt build, deploy the mtar file again. (it will stop the app and restart the app in the background)
+
+- run the same GET requiest and we will get the data, after adding the authorization.
+- this just the service testing part, we will see to actually check the app further.
+
+- Error - note - we can able to access the author ID but not author name, there is a diff way to show the name.
